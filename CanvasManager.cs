@@ -28,6 +28,10 @@ public class CanvasManager : MonoBehaviour
         OpenScreen(1);
     }
 
+    public void ButtonEscape(){
+        //escape/resume
+    }
+
     public void OpenScreen(int screenIndex){
         foreach(GameObject newObj in allScreenObjects){
             newObj.SetActive(false);
