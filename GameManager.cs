@@ -8,6 +8,21 @@ public class GameManager : MonoBehaviour
 
     void Start(){
         CanvasManager = this.gameObject.GetComponent<CanvasManager>();
-        
+    }
+
+    public void StartPlay(){
+        CanvasManager.OpenScreen(2);
+    }
+
+    public void DoQuit(){
+        Application.Quit();
+    }
+
+    public void GameOver(bool winTrueLoseFalse){
+        var winLoseIndex = 3;
+        if(!winTrueLoseFalse){
+            winLoseIndex = 4;
+        }
+        CanvasManager.OpenScreen(winLoseIndex);
     }
 }
