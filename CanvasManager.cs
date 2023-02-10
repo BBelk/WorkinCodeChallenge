@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class CanvasManager : MonoBehaviour
@@ -9,6 +10,22 @@ public class CanvasManager : MonoBehaviour
     public GameManager GameManager;
     public List<GameObject> allScreenObjects; 
     // 1 title, 2 pause, 3 gameplay, 4 gameOver
+    public GameObject cursorRT;
+
+    
+
+    void Update(){
+        var screenPoint = (Vector3)Input.mousePosition;
+screenPoint.z = 10.0f; //distance of the plane from the camera
+var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
+        //
+    //     Vector3 mousePos = Input.mousePosition;
+    // mousePos.z = Camera.main.nearClipPlane;
+    // var worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+    cursorRT.transform.position = newPosition;
+
+    
+    }
 
     void Start(){
         GameManager = this.gameObject.GetComponent<GameManager>();
