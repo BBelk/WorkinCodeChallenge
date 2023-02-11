@@ -5,9 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public CanvasManager CanvasManager;
+    public MapController MapController;
 
     void Start(){
         CanvasManager = this.gameObject.GetComponent<CanvasManager>();
+        MapController = this.gameObject.GetComponent<MapController>();
     }
 
     public void StartPlay(){

@@ -10,6 +10,8 @@ public class MeteorScript : MonoBehaviour
     public GameObject showMeteorObject;
     public ParticleSystem meteorExplosionPS;
 
+    public bool isBig;
+
     public void ResetMeteor(){
         showMeteorObject.SetActive(false);
         meteorExplosionPS.Stop();
@@ -19,6 +21,6 @@ public class MeteorScript : MonoBehaviour
     public void ExplodeMeter(){
         meteorExplosionPS.Play();
         showMeteorObject.SetActive(false);
-        
+
     }
 }

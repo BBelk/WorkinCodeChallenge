@@ -12,6 +12,10 @@ public class MapController : MonoBehaviour
 
     public List<GameObject> allMeteors;
     public GameObject meteorHolder;
+
+    public GameObject playerHolder;
+
+    public List<Vector2> mapEdges;
     void Start()
     {
         GenerateStarField();
@@ -40,4 +44,9 @@ public class MapController : MonoBehaviour
             allMeteors.Add(newMeteor);
         }
     }
+
+    public void SpawnMeteor(){
+
+    }
+
 }
