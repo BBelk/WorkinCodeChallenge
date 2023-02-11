@@ -21,6 +21,15 @@ public class MeteorScript : MonoBehaviour
     public void ExplodeMeter(){
         meteorExplosionPS.Play();
         showMeteorObject.SetActive(false);
-
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player"){
+            MapController.GameManager.PlayerHit();
+        }
+        if(other.gameObject.tag == "Bullet"){
+            other.gameObject.GetComponent<BulletScript>().HitObject();
+            ExplodeMeter();
+        }
     }
 }

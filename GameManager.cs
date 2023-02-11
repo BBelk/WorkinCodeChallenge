@@ -27,4 +27,8 @@ public class GameManager : MonoBehaviour
         }
         CanvasManager.OpenScreen(winLoseIndex);
     }
+
+    public void PlayerHit(){
+        
+    }
 }
