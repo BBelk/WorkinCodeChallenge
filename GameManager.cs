@@ -29,6 +29,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void PlayerHit(){
-        
+        Debug.Log("PLAYER HIT");
     }
 }
