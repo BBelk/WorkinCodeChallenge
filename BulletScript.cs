@@ -12,6 +12,7 @@ public class BulletScript : MonoBehaviour
 
     public Coroutine bulletAutoReset;
     public Vector3 storedVelocity;
+    public bool isBoss;
 
     public void PauseBullet(){
         storedVelocity = myRigid.velocity;
@@ -26,7 +27,8 @@ public class BulletScript : MonoBehaviour
         bulletObject.SetActive(false);
         bulletSC.enabled = false;
         myRigid.velocity = Vector3.zero;
-        Invoke("ResetBullet", 1.0f);
+        // Invoke("ResetBullet", 1.0f);
+        ResetBullet();
     }
 
     public void ResetBullet(){

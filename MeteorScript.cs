@@ -41,7 +41,7 @@ public class MeteorScript : MonoBehaviour
         mySC.enabled = true;
         showMeteorObject.GetComponent<Rigidbody>().AddTorque(Random.onUnitSphere * 100f);
         this.transform.localEulerAngles = new Vector3(0f, myAngle, 0f);
-         myRigid.AddForce(transform.forward * UnityEngine.Random.Range(700f, 1000f));
+         myRigid.AddForce(transform.forward * UnityEngine.Random.Range(500f, 600f));
     }
 
     public void ResetMeteor(){

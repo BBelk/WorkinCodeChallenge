@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
   public Vector3 storedVelocity;
   public Vector3 startPosition = new Vector3(0f, 6f, 5f);
 
+  public ParticleSystem firingPS;
+  public ParticleSystem explodePS;
+
   void Start(){
     GenerateBullets();
   }
@@ -63,12 +66,16 @@ public class PlayerController : MonoBehaviour
 
     public Transform bulletLaunchPoint;
   public void FireBullet(){
+    firingPS.Stop();
+    firingPS.Play();
     allBullets[bulletIndex].transform.position = bulletLaunchPoint.position;
     allBullets[bulletIndex].GetComponent<BulletScript>().FireBullet(bulletSpeed, PlayerObject2.transform.localEulerAngles.y +360f);
     bulletIndex += 1;
 
     if(bulletIndex >= allBullets.Count){bulletIndex = 0;}
   }
+
+  
 
 void Update(){
     if (canControl){
