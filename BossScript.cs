@@ -7,33 +7,24 @@ public class BossScript : MonoBehaviour
     public GameManager GameManager;
     public GameObject BossObject;
     public GameObject bossFrontObject;
-    // public GameObject bossLeftGun;
-    // public GameObject bossRightGun;
-    public List<GameObject> allOvershields;
     public GameObject bossLeftWing;
     public GameObject bossRightWing;
     public GameObject bossBlockBox;
-
-    // public Transform bossFrontFirePoint;
-    // public Transform bossLeftFirePoint;
-    // public Transform bossRightFirePoint;
+    public List<GameObject> allOvershields;
     public List<GameObject> gunObjectList;
     public List<Transform> firePoints;
 
-    public List<ParticleSystem> bossFrontPS;
-    public List<ParticleSystem> bossLeftWingPS;
-    public List<ParticleSystem> bossRightWingPS;
+    public List<ParticleSystem> bossPS;
 
     public List<int> damageList;
 
     public List<GameObject> allBullets;
     public int bulletIndex;
     public float bulletSpeed;
+    public Coroutine firingCo;
 
     void Start(){
         GenerateBullets();
-        // FireRandom();
-        StartCoroutine(FireRandom());
     }
 
     public void GenerateBullets(){
@@ -45,20 +36,34 @@ public class BossScript : MonoBehaviour
         }
   }
 
+  public void PauseBoss(){
+    foreach(GameObject newObj in allBullets){
+        newObj.GetComponent<BulletScript>().PauseBullet();
+    }
+  }
+
+  public void Resume(){
+        foreach(GameObject newObj in allBullets){
+            newObj.GetComponent<BulletScript>().Resume();
+        }
+    }
+
     public void StartBoss(){
         bossLeftWing.SetActive(true);
         bossRightWing.SetActive(true);
         bossFrontObject.SetActive(true);
-        damageList[0] = 10;
-        damageList[1] = 10;
+        damageList[0] = 15;
+        damageList[1] = 15;
         damageList[2] = 15;
+       firingCo = StartCoroutine(FireRandom());
     }
 
     public IEnumerator FireRandom(){
+        yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         while(bossLeftWing.activeSelf == true && bossRightWing.activeSelf == true){
             FireBullet(0);
             FireBullet(1);
-            yield return new WaitForSeconds(Random.Range(1f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.75f, 1f));
         }
         while(bossLeftWing.activeSelf == true && bossRightWing.activeSelf == false){
             FireBullet(0);
@@ -98,6 +103,10 @@ public class BossScript : MonoBehaviour
     public void TookDamage(int leftRightFront){
         damageList[leftRightFront] = damageList[leftRightFront] - 1;
         // Hit(leftRightFront);
+           if(damageList[0] <= 0 && damageList[1] <= 0){
+            BossDefeated();
+           }
+
         if(damageList[leftRightFront] <= 0){
             if(leftRightFront == 0){
                 KillLeftWing();
@@ -110,21 +119,24 @@ public class BossScript : MonoBehaviour
             }
         }
     }
+    
+    public void BossDefeated(){
+        KillFront();
+        //You won!
+    }
 
     public void KillLeftWing(){
         bossLeftWing.SetActive(false);
-        bossLeftWingPS[0].Play();
-        bossLeftWingPS[1].Play();
+        bossPS[0].Play();
     }
     public void KillRightWing(){
         bossRightWing.SetActive(false);
-        bossRightWingPS[0].Play();
-        bossRightWingPS[1].Play();
+        bossPS[1].Play();
     }
 
     public void KillFront(){
         bossFrontObject.SetActive(false);
-        bossFrontPS[0].Play();
+        bossPS[2].Play();
     }
 
     

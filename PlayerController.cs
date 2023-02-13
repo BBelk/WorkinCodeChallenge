@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
   public GameManager GameManager;
+  public GameObject playerHolder;
   public GameObject PlayerObject;
   public GameObject PlayerObject2;
   public Rigidbody PlayerR;
@@ -24,9 +25,31 @@ public class PlayerController : MonoBehaviour
 
   public ParticleSystem firingPS;
   public ParticleSystem explodePS;
+  
+    public List<Vector3> cameraPositions; // 0 start, 1 boss
+    public float moveCameraTime = 3;
+    public Coroutine moveCameraCo;
 
   void Start(){
     GenerateBullets();
+    moveCameraCo = StartCoroutine(SlideCamera());
+  }
+
+  public void StartPlayer(){
+    playerHolder.transform.position = cameraPositions[0];
+  }
+
+  public IEnumerator SlideCamera(){
+    var elapsedTime = 0f;
+    while(elapsedTime < moveCameraTime){
+        var inverseLerp = Mathf.InverseLerp(0f, moveCameraTime, elapsedTime);
+        playerHolder.transform.position = Vector3.Lerp(cameraPositions[0], cameraPositions[1], (elapsedTime / moveCameraTime));
+        elapsedTime += Time.deltaTime;
+        yield return null;
+    }
+    if(elapsedTime >= moveCameraTime){
+        StopCoroutine(moveCameraCo);
+    }
   }
 
   public void GenerateBullets(){

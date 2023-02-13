@@ -8,8 +8,6 @@ public class MapController : MonoBehaviour
     
     public List<GameObject> allStarObjects;
     public GameObject starFieldObject;
-    // Start is called before the first frame update
-
     public List<GameObject> allMeteors;
     public int meteorIndex;
     public GameObject meteorHolder;
@@ -17,6 +15,7 @@ public class MapController : MonoBehaviour
     public GameObject playerHolder;
 
     public List<Vector2> mapEdges;
+
     void Start()
     {
         GenerateStarField();

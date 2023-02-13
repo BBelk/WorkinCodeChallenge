@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     void Start(){
         CanvasManager = this.gameObject.GetComponent<CanvasManager>();
         MapController = this.gameObject.GetComponent<MapController>();
-        MapController.Invoke("StartGame", 1.0f);
+        // MapController.Invoke("StartGame", 1.0f);
         // MapController.StartGame();
     }
 

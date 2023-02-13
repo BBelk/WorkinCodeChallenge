@@ -18,11 +18,12 @@ public class CanvasManager : MonoBehaviour
         var screenPoint = (Vector3)Input.mousePosition;
 screenPoint.z = 10.0f; //distance of the plane from the camera
 var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
-        //
-    //     Vector3 mousePos = Input.mousePosition;
-    // mousePos.z = Camera.main.nearClipPlane;
-    // var worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+
     cursorRT.transform.position = newPosition;
+
+    if (Input.GetKeyDown(KeyCode.Escape)){
+            ButtonEscape();
+    }
 
     
     }
@@ -48,6 +49,16 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
 
     public void ButtonEscape(){
         //escape/resume
+        if(allScreenObjects[0].activeSelf || allScreenObjects[3].activeSelf){return;}
+        if(allScreenObjects[1].activeSelf == true){
+            GameManager.Resume();
+            OpenScreen(2);
+            return;
+        }
+        if(!allScreenObjects[1].activeSelf){
+            // GameManager.But();
+            ButtonPause();
+        }
     }
 
     public void OpenScreen(int screenIndex){
