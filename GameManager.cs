@@ -6,14 +6,18 @@ public class GameManager : MonoBehaviour
 {
     public CanvasManager CanvasManager;
     public MapController MapController;
+    public PlayerController PlayerController;
 
     void Start(){
         CanvasManager = this.gameObject.GetComponent<CanvasManager>();
         MapController = this.gameObject.GetComponent<MapController>();
+        MapController.Invoke("StartGame", 1.0f);
+        // MapController.StartGame();
     }
 
     public void StartPlay(){
         CanvasManager.OpenScreen(2);
+        MapController.StartGame();
     }
 
     public void DoQuit(){
@@ -30,5 +34,20 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHit(){
         Debug.Log("PLAYER HIT");
+    }
+
+    public void Pause(){
+        PlayerController.PausePlayer();
+        MapController.PauseMeteors();
+    }
+
+    public void Resume(){
+        PlayerController.Resume();
+        MapController.Resume();
+    }
+
+    public void ResetAll(){
+        PlayerController.ResetAll();
+        MapController.ResetAll();
     }
 }

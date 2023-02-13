@@ -43,6 +43,7 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
     }
     public void ButtonPause(){
         OpenScreen(1);
+        GameManager.Pause();
     }
 
     public void ButtonEscape(){

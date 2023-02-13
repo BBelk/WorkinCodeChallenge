@@ -11,6 +11,16 @@ public class BulletScript : MonoBehaviour
     public ParticleSystem bulletExplodePS;
 
     public Coroutine bulletAutoReset;
+    public Vector3 storedVelocity;
+
+    public void PauseBullet(){
+        storedVelocity = myRigid.velocity;
+        myRigid.velocity = Vector3.zero;
+    }
+
+    public void Resume(){
+        myRigid.velocity = storedVelocity;
+    }
     public void HitObject(){
         bulletExplodePS.Play();
         bulletObject.SetActive(false);

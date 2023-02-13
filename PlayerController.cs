@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
   public float bulletSpeed;
   public Transform bulletHolder;
 
+  public Vector3 storedVelocity;
+  public Vector3 startPosition = new Vector3(0f, 6f, 5f);
+
   void Start(){
     GenerateBullets();
   }
@@ -32,8 +35,42 @@ public class PlayerController : MonoBehaviour
         }
   }
 
-  // Update is called once per frame
-  void Update(){
+  public void PausePlayer(){
+    storedVelocity = PlayerR.velocity;
+    PlayerR.velocity = Vector3.zero;
+    canControl = false;
+    foreach(GameObject newObj in allBullets){
+        newObj.GetComponent<BulletScript>().PauseBullet();
+    }
+  }
+  
+    public void Resume(){
+        PlayerR.velocity = storedVelocity;
+        canControl = true;
+        foreach(GameObject newObj in allBullets){
+            newObj.GetComponent<BulletScript>().Resume();
+        }
+    }
+
+    public void ResetAll(){
+        foreach(GameObject newObj in allBullets){
+            newObj.GetComponent<BulletScript>().ResetBullet();
+            PlayerObject.transform.position = startPosition;
+            PlayerObject2.transform.localEulerAngles = Vector3.zero;
+        }
+    }
+  
+
+    public Transform bulletLaunchPoint;
+  public void FireBullet(){
+    allBullets[bulletIndex].transform.position = bulletLaunchPoint.position;
+    allBullets[bulletIndex].GetComponent<BulletScript>().FireBullet(bulletSpeed, PlayerObject2.transform.localEulerAngles.y +360f);
+    bulletIndex += 1;
+
+    if(bulletIndex >= allBullets.Count){bulletIndex = 0;}
+  }
+
+void Update(){
     if (canControl){
       float distance;
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -49,15 +86,6 @@ public class PlayerController : MonoBehaviour
         FireBullet();
       }
     }
-  }
-
-    public Transform bulletLaunchPoint;
-  public void FireBullet(){
-    allBullets[bulletIndex].transform.position = bulletLaunchPoint.position;
-    allBullets[bulletIndex].GetComponent<BulletScript>().FireBullet(bulletSpeed, PlayerObject2.transform.localEulerAngles.y +360f);
-    bulletIndex += 1;
-
-    if(bulletIndex >= allBullets.Count){bulletIndex = 0;}
   }
 
   public Vector3 worldPosition;

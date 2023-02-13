@@ -13,12 +13,26 @@ public class MeteorScript : MonoBehaviour
     public SphereCollider mySC;
 
     public bool isBig;
+    public float myAngle;
+
+    public Vector3 storedVelocity;
 
     void Start(){
         // StartMeteor(false, new Vector3(-10f, -0.7f, -30f), 1f);
     }
 
+    public void PauseMeteor(){
+    storedVelocity = myRigid.velocity;
+    myRigid.velocity = Vector3.zero;
+  }
+  
+    public void Resume(){
+        myRigid.velocity = storedVelocity;
+    }
+
     public void StartMeteor(bool doBig, Vector3 startPosition, float newAngle){
+        isBig = doBig;
+        myAngle = newAngle;
         var torqueSpeed = 100f;
         if(doBig){this.transform.localScale = new Vector3(1f, 1f, 1f);}
         if(!doBig){this.transform.localScale = new Vector3(0.33f, 0.33f, 0.33f);torqueSpeed *= 5f;}
@@ -26,7 +40,7 @@ public class MeteorScript : MonoBehaviour
         showMeteorObject.SetActive(true);
         mySC.enabled = true;
         showMeteorObject.GetComponent<Rigidbody>().AddTorque(Random.onUnitSphere * 100f);
-        this.transform.localEulerAngles = new Vector3(0f, newAngle, 0f);
+        this.transform.localEulerAngles = new Vector3(0f, myAngle, 0f);
          myRigid.AddForce(transform.forward * UnityEngine.Random.Range(700f, 1000f));
     }
 
@@ -34,6 +48,7 @@ public class MeteorScript : MonoBehaviour
         showMeteorObject.SetActive(false);
         meteorExplosionPS.Stop();
         // this.gameObject.SetActive(false);
+
         mySC.enabled = false;
     }
 
@@ -42,6 +57,8 @@ public class MeteorScript : MonoBehaviour
         showMeteorObject.SetActive(false);
         mySC.enabled = false;
         myRigid.velocity = Vector3.zero;
+        if(isBig){MapController.BigMeteorDestroyed(this.transform.position, myAngle);}
+        MapController.SubtractMeteor();
     }
     private void OnTriggerEnter(Collider other)
     {
