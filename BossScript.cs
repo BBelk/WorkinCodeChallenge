@@ -22,6 +22,7 @@ public class BossScript : MonoBehaviour
     public int bulletIndex;
     public float bulletSpeed;
     public Coroutine firingCo;
+    public bool bossActive;
 
     void Start(){
         GenerateBullets();
@@ -47,11 +48,12 @@ public class BossScript : MonoBehaviour
         foreach(GameObject newObj in allBullets){
             newObj.GetComponent<BulletScript>().Resume();
         }
-        
+        if(!bossActive){return;}
         firingCo = StartCoroutine(FireRandom());
     }
 
     public void StartBoss(){
+        bossActive = true;
        firingCo = StartCoroutine(FireRandom());
     }
 
@@ -62,6 +64,7 @@ public class BossScript : MonoBehaviour
         bossBlockBox.SetActive(true);
         damageList[0] = 15;
         damageList[1] = 15;
+        bossActive = false;
     }
 
     public IEnumerator FireRandom(){
@@ -131,6 +134,7 @@ public class BossScript : MonoBehaviour
         StopCoroutine(firingCo);
         bossBlockBox.SetActive(false);
         GameManager.GameOver(true);
+        bossActive = false;
     }
 
     public void KillLeftWing(){
