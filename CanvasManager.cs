@@ -16,7 +16,7 @@ public class CanvasManager : MonoBehaviour
 
     void Update(){
         var screenPoint = (Vector3)Input.mousePosition;
-screenPoint.z = 10.0f; //distance of the plane from the camera
+screenPoint.z = 10.0f;
 var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
 
     cursorRT.transform.position = newPosition;
@@ -24,8 +24,6 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
     if (Input.GetKeyDown(KeyCode.Escape)){
             ButtonEscape();
     }
-
-    
     }
 
     void Start(){
@@ -35,16 +33,26 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
 
     public void ButtonPlay(){
         GameManager.StartPlay();
+        timerText.text = "00:00";
+         currentTime = 0f;
+        StartTimer();
     }
     public void ButtonQuit(){
         GameManager.DoQuit();
     }
     public void ButtonMainMenu(){
+        StopTimer();
         OpenScreen(0);
     }
     public void ButtonPause(){
         OpenScreen(1);
         GameManager.Pause();
+        doTime = false;
+    }
+
+    public void ButtonResume(){
+        StartTimer();
+        OpenScreen(2);
     }
 
     public void ButtonEscape(){
@@ -52,11 +60,10 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
         if(allScreenObjects[0].activeSelf || allScreenObjects[3].activeSelf){return;}
         if(allScreenObjects[1].activeSelf == true){
             GameManager.Resume();
-            OpenScreen(2);
+            ButtonResume();
             return;
         }
         if(!allScreenObjects[1].activeSelf){
-            // GameManager.But();
             ButtonPause();
         }
     }
@@ -75,9 +82,43 @@ var newPosition = Camera.main.ScreenToWorldPoint(screenPoint);
     public TMP_Text winLoseText;
     public TMP_Text scoreText;
     public void SetScore(int winLoseIndex){
+        StopTimer();
         winLoseText.text = "YOU WON!";
-        if(winLoseIndex == 4){
-            winLoseText.text = "YOU LOSE!";
+        float minutes = Mathf.FloorToInt(currentTime / 60); 
+        float seconds = Mathf.FloorToInt(currentTime % 60);
+        var getTime = string.Format("{0:00}:{1:00}", minutes, seconds);
+        var deathCount = GameManager.PlayerController.deathCount;
+        var finalScore = (1000 - currentTime) + (deathCount * -100);
+        if(finalScore < 0){finalScore = 0;}
+        scoreText.text = "Score\nTotal Time: " + getTime + "\nTotal Deaths: " + deathCount + "\n\nTotal Score: " + finalScore;
+        // if(winLoseIndex == 4){
+        //     winLoseText.text = "YOU LOSE!";
+        // }
+    }
+
+    public TMP_Text timerText;
+    public float currentTime = 0f;
+    public Coroutine timerCoroutine;
+    public bool doTime;
+    public void StartTimer(){
+        doTime = true;
+        timerCoroutine = StartCoroutine(TimerCo());
+    }
+
+    public void StopTimer(){
+        doTime = false;
+        if(timerCoroutine != null){
+        StopCoroutine(timerCoroutine);
+        }
+    }
+
+    public IEnumerator TimerCo(){
+        while(doTime){
+        yield return new WaitForSeconds(1f);
+        currentTime += 1f;
+        float minutes = Mathf.FloorToInt(currentTime / 60); 
+        float seconds = Mathf.FloorToInt(currentTime % 60);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 

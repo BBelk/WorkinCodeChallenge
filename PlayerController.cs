@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
   public GameObject PlayerObject;
   public GameObject PlayerObject2;
   public Rigidbody PlayerR;
+  public SphereCollider mySC;
+  public BoxCollider myBC;
 
   public float moveSpeed;
 
@@ -32,11 +34,13 @@ public class PlayerController : MonoBehaviour
 
   void Start(){
     GenerateBullets();
-    moveCameraCo = StartCoroutine(SlideCamera());
   }
 
   public void StartPlayer(){
+    ResetAll();
+    deathCount = 0;
     playerHolder.transform.position = cameraPositions[0];
+    canControl = true;
   }
 
   public IEnumerator SlideCamera(){
@@ -48,8 +52,13 @@ public class PlayerController : MonoBehaviour
         yield return null;
     }
     if(elapsedTime >= moveCameraTime){
+        GameManager.BossScript.StartBoss();
         StopCoroutine(moveCameraCo);
     }
+  }
+
+  public void StartBossTransition(){
+    moveCameraCo = StartCoroutine(SlideCamera());
   }
 
   public void GenerateBullets(){
@@ -81,7 +90,7 @@ public class PlayerController : MonoBehaviour
     public void ResetAll(){
         foreach(GameObject newObj in allBullets){
             newObj.GetComponent<BulletScript>().ResetBullet();
-            PlayerObject.transform.position = startPosition;
+            PlayerObject.transform.localPosition = startPosition;
             PlayerObject2.transform.localEulerAngles = Vector3.zero;
         }
     }
@@ -135,9 +144,38 @@ void Update(){
 
       if (playerPos.z < GameManager.MapController.mapEdges[1].x) { PlayerObject.transform.localPosition = new Vector3(playerPos.x, playerPos.y, GameManager.MapController.mapEdges[1].y); }
       if (playerPos.z > GameManager.MapController.mapEdges[1].y) { PlayerObject.transform.localPosition = new Vector3(playerPos.x, playerPos.y, GameManager.MapController.mapEdges[1].x); }
-
-      //fire buttlet
     }
+  }
+
+  public int deathCount;
+
+  public void PlayerHit(){
+    deathCount += 1;
+    PlayerObject.transform.localPosition = startPosition;
+    PlayerObject2.transform.localEulerAngles = Vector3.zero;
+    PlayerR.velocity = Vector3.zero;
+    StartCoroutine(PlayerFlashCo());
+  }
+
+  public IEnumerator PlayerFlashCo(){
+    var flickerTime = 0.2f;
+    mySC.enabled = false;
+    myBC.enabled = false;
+    PlayerObject2.SetActive(false);
+    yield return new WaitForSeconds(flickerTime);
+    PlayerObject2.SetActive(true);
+    yield return new WaitForSeconds(flickerTime);
+    PlayerObject2.SetActive(false);
+    yield return new WaitForSeconds(flickerTime);
+    PlayerObject2.SetActive(true);
+    yield return new WaitForSeconds(flickerTime);
+    PlayerObject2.SetActive(false);
+    yield return new WaitForSeconds(flickerTime);
+    PlayerObject2.SetActive(true);
+    yield return new WaitForSeconds(flickerTime);
+    
+    mySC.enabled = true;
+    myBC.enabled = true;
   }
   
 }

@@ -40,22 +40,28 @@ public class BossScript : MonoBehaviour
     foreach(GameObject newObj in allBullets){
         newObj.GetComponent<BulletScript>().PauseBullet();
     }
+    StopCoroutine(firingCo);
   }
 
   public void Resume(){
         foreach(GameObject newObj in allBullets){
             newObj.GetComponent<BulletScript>().Resume();
         }
+        
+        firingCo = StartCoroutine(FireRandom());
     }
 
     public void StartBoss(){
+       firingCo = StartCoroutine(FireRandom());
+    }
+
+    public void ResetBoss(){
         bossLeftWing.SetActive(true);
         bossRightWing.SetActive(true);
         bossFrontObject.SetActive(true);
+        bossBlockBox.SetActive(true);
         damageList[0] = 15;
         damageList[1] = 15;
-        damageList[2] = 15;
-       firingCo = StartCoroutine(FireRandom());
     }
 
     public IEnumerator FireRandom(){
@@ -103,10 +109,6 @@ public class BossScript : MonoBehaviour
     public void TookDamage(int leftRightFront){
         damageList[leftRightFront] = damageList[leftRightFront] - 1;
         // Hit(leftRightFront);
-           if(damageList[0] <= 0 && damageList[1] <= 0){
-            BossDefeated();
-           }
-
         if(damageList[leftRightFront] <= 0){
             if(leftRightFront == 0){
                 KillLeftWing();
@@ -118,11 +120,17 @@ public class BossScript : MonoBehaviour
                 KillFront();
             }
         }
+           if(damageList[0] <= 0 && damageList[1] <= 0){
+            BossDefeated();
+           }
+
     }
     
     public void BossDefeated(){
         KillFront();
-        //You won!
+        StopCoroutine(firingCo);
+        bossBlockBox.SetActive(false);
+        GameManager.GameOver(true);
     }
 
     public void KillLeftWing(){

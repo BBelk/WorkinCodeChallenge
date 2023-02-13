@@ -55,10 +55,7 @@ public class MapController : MonoBehaviour
             newAngle += 45f * Random.value < 0.5f ? 1 : -1;
         }
         newMeteor.GetComponent<MeteorScript>().StartMeteor(true, new Vector3(mapEdges[0].x + 0.1f, -0.3f, height), newAngle);
-        // IncrementBulletIndex();
         IncrementMeteorIndex();
-        // meteorIndex += 1;
-        // if(meteorIndex >= allMeteors.Count){meteorIndex = 0;}
     }
     public void IncrementMeteorIndex(){
         meteorIndex += 1;
@@ -88,7 +85,7 @@ public class MapController : MonoBehaviour
     public void SubtractMeteor(){
         meteorCount -= 1;
         if(meteorCount == 0){
-            Debug.Log("Boss Time");
+            GameManager.PlayerController.StartBossTransition();
         }
     }
 

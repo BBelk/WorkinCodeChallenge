@@ -27,7 +27,6 @@ public class BulletScript : MonoBehaviour
         bulletObject.SetActive(false);
         bulletSC.enabled = false;
         myRigid.velocity = Vector3.zero;
-        // Invoke("ResetBullet", 1.0f);
         ResetBullet();
     }
 
@@ -37,6 +36,7 @@ public class BulletScript : MonoBehaviour
         bulletObject.SetActive(false);
         bulletSC.enabled = false;
         myRigid.velocity = Vector3.zero;
+        if(isBoss){bulletExplodePS.Stop();}
     }
 
     public void FireBullet(float bulletSpeed, float newAngle){
@@ -45,7 +45,8 @@ public class BulletScript : MonoBehaviour
         bulletObject.SetActive(true);
         bulletSC.enabled = true;
         myRigid.AddForce(transform.forward * bulletSpeed);
-
+        
+        if(isBoss){bulletExplodePS.Play();}
         bulletAutoReset = StartCoroutine("CountdownReset", 5.0f);
     }
 

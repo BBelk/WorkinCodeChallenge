@@ -19,9 +19,7 @@ public class BossGunScript : MonoBehaviour
         }
     }
 
-    void Update(){
-   
-        // testObject.transform.position = worldPosition;
+    void FixedUpdate(){
         Vector3 dir = playerObject.transform.position - this.transform.position;
         dir.y = 0;
         this.transform.rotation = Quaternion.LookRotation(dir);

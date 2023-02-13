@@ -17,10 +17,6 @@ public class MeteorScript : MonoBehaviour
 
     public Vector3 storedVelocity;
 
-    void Start(){
-        // StartMeteor(false, new Vector3(-10f, -0.7f, -30f), 1f);
-    }
-
     public void PauseMeteor(){
     storedVelocity = myRigid.velocity;
     myRigid.velocity = Vector3.zero;
