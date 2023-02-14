@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour
   public Transform bulletLaunchPoint;
   public void FireBullet()
   {
+    mouseClickHeldTime = 0f;
     firingPS.Stop();
     firingPS.Play();
     allBullets[bulletIndex].transform.position = bulletLaunchPoint.position;
@@ -143,9 +144,20 @@ public class PlayerController : MonoBehaviour
       if (Input.GetMouseButtonDown(0))
       {
         FireBullet();
+        mouseClickHeldTime = 0.01f;
+        return;
+      }
+      if (Input.GetMouseButton(0))
+      {
+        if(mouseClickHeldTime >= 0.25f){
+            FireBullet();
+        }
+        mouseClickHeldTime += Time.deltaTime;
       }
     }
   }
+
+  public float mouseClickHeldTime = 0f;
 
   public Vector3 worldPosition;
   Plane plane = new Plane(Vector3.up, 0);
